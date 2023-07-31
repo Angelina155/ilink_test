@@ -1,0 +1,153 @@
+
+    function dropHandler(e: React.DragEvent<HTMLDivElement>): void {
+        setCurrentAnswer([...currentAnswer, currentWord])
+        console.log(currentAnswer);
+    }
+
+    function pushToAnswerr(e: React.DragEvent<HTMLDivElement>): void {
+        removeShadow(e);
+        e.preventDefault();
+        let na: string[];
+        na = currentAnswer.slice(0);
+        na.push(currentWord);
+        setCurrentAnswer(na)
+        console.log('sdfsdf' + currentAnswer);
+    }
+
+    function dragStartHandler(e: React.DragEvent<HTMLParagraphElement>, word: KitWord): React.DragEventHandler<HTMLParagraphElement> | undefined {
+        setCurrentWord(word.word)
+        console.log(word)
+        return
+    }
+
+    function dragOverHandler(e: React.DragEvent<HTMLParagraphElement>): void {
+        e.preventDefault();
+        const target = e.target as HTMLElement
+        if (target.nodeName == 'P')
+            target.style.boxShadow='6px 0 10px #C4C9BD'
+    }
+
+    function removeShadow(e: React.DragEvent) {
+        e.preventDefault();
+        const target = e.target as HTMLElement
+        if (target.nodeName == 'P')
+            target.style.boxShadow='0px 8px 4px -6px rgba(0, 0, 0, 0.25)'
+    }
+
+    /*function dropHandler(e: React.DragEvent<HTMLParagraphElement>, word: string): void {
+        e.preventDefault()
+        const curIndex = 
+    }*/
+
+    return (
+        <StyledAnswerBox>
+            <StyledAnswerField
+                /*onDragOver={(e) => dragOverHandler(e)}*/
+                onDrop={(e) => dropHandler(e)}
+                onDragOver={(e) => dragOverHandler(e)}
+             >
+            {currentAnswer.map((word, index) => (
+                <StyledAnswerWord 
+                    draggable={true}
+                    key={index}
+                    onDragStart={(e) => dragStartHandler(e, word)}
+                    onDrop={(e) => pushToAnswerr(e)}
+                    onDragOver={(e) => dragOverHandler(e)}
+                    onDragLeave={(e) => removeShadow(e)}
+                    onDragEnd={(e) => removeShadow(e)}
+                >
+                {word}
+                </StyledAnswerWord>
+            ))}    
+            </StyledAnswerField>
+            <StyledAnswerWordsList>
+            {currentWordsKit.map((kitWord, index) => (
+                <StyledAnswerWord 
+                    draggable={true}
+                    key={index}
+                    onDragStart={e => dragStartHandler(e, kitWord)}
+                    /*onDrop={e => pushToAnswer(e)}
+                    onDragOver={(e) => dragOverHandler(e)}
+                    onDragLeave={(e) => dragOverHandler(e)}
+                    onDragEnd={(e) => dragEndHandler(e)}*/
+                >
+                {kitWord.word}
+                </StyledAnswerWord>
+            ))}
+            </StyledAnswerWordsList>
+        </StyledAnswerBox>
+    );
+};
+
+export default AnswerBox;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*import React, { FC, useState } from 'react';
+import styled from 'styled-components';
+import AnswerField from './AnswerField';
+import AnswerWordsList from './AnswerWordsList';
+
+const StyledAnswerBox = styled.div`
+
+`
+
+interface AnswerBoxProps {
+  words: string[];
+}
+
+
+const AnswerBox: FC<AnswerBoxProps> = ({ words }) => {
+    const [currentAnswer, setCurrentAnswer] = useState<string[]>([])
+
+    function pushToAnswer(word: string): void {
+        currentAnswer.push(word)
+        setCurrentAnswer(currentAnswer)
+    }
+
+
+    return (
+        <StyledAnswerBox>
+            <AnswerField/>
+            <AnswerWordsList words={words}/>
+        </StyledAnswerBox>
+    );
+};
+
+export default AnswerBox;*/

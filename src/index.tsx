@@ -13,7 +13,19 @@ const Global = createGlobalStyle`
   font-size: 18px;
   color: #000;
   font-family: 'Roboto';
-  font-weght: 400;
+  font-weight: 400;
+  @media (max-width: 1480px) {
+    font-size: 16px;
+  }
+  @media (max-width: 1160px) {
+    font-size: 14px;
+  }
+  @media (max-width: 740px) {
+    font-size: 12px;
+  }
+  @media (max-width: 450px) {
+    font-size: 10px;
+  }
 }
 `
 

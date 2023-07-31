@@ -13,9 +13,9 @@ align-items: center;
 
 let translationTask: { task: string; answer: string; extraWords: string[] };
 translationTask = {
-  task: 'Я хотел бы гамбургер и стакан воды, пожалуйста',
-  answer: 'I would like a hamburger and a glass of water please',
-  extraWords: ['I', 'would', 'like', 'a', 'hamburger', 'and', 'glass', 'of', 'water', 'please', 'likes', 'to', 'cup']
+  task: 'Я хотел бы бургер и стакан воды, пожалуйста',
+  answer: 'I would like a burger and a glass of water please',
+  extraWords: ['I', 'would', 'like', 'a', 'burger', 'and', 'a', 'glass', 'of', 'water', 'please', 'likes', 'to', 'cup']
 };
 
 const App = () => {
