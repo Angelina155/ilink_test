@@ -52,19 +52,6 @@ const AnswerBox: FC<AnswerBoxProps> = ({ words }) => {
         setCurrentWord(kitWord);
     }
 
-    function elementInteraction(e: React.DragEvent, isOver: boolean): void {
-        e.preventDefault();
-        const target = e.target as HTMLElement;
-        if (target.nodeName === 'P') {
-            target.style.boxShadow = isOver ? '6px 0 10px #C4C9BD' : '0px 8px 4px -6px rgba(0, 0, 0, 0.25)';
-            target.style.marginRight = isOver ? '20px' : '0';
-        }
-    }
-    
-    function dragOverBoxHandler(e: React.DragEvent): void {
-        e.preventDefault();
-    }
-
     function deleteWord (array: KitWord[], id: number, newElement: KitWord | null = null) : KitWord[] {
         let temp: KitWord[] = array.filter(el => el.id !== id);
 
@@ -81,9 +68,9 @@ const AnswerBox: FC<AnswerBoxProps> = ({ words }) => {
         if (!currentAnswer.includes(currentWord)) {
             setCurrentAnswer([...currentAnswer, currentWord]);
             setCurrentWordsKit(deleteWord(currentWordsKit, currentWord.id, {id: currentWord.id, word: ''}));
-        }
-        
+        }   
     }
+
     function kitDropHandler(e: React.DragEvent): void {
         e.preventDefault();    
 
@@ -108,8 +95,6 @@ const AnswerBox: FC<AnswerBoxProps> = ({ words }) => {
     function elementDropHandler(e: React.DragEvent, kitWord: KitWord): void {
         e.preventDefault();
         
-        elementInteraction(e, false);
-
         let temp: KitWord[] = Array.from(currentAnswer);
         if (currentAnswer.includes(currentWord)) {
             temp = deleteWord(temp, currentWord.id);      
@@ -131,12 +116,10 @@ const AnswerBox: FC<AnswerBoxProps> = ({ words }) => {
                 elementStartHandler={dragStartHandler}
                 dropHandler={answerFieldDropHandler}
                 elementDropHandler={elementDropHandler}
-                elementInteraction={elementInteraction}
             />
             <WordsList
                 currentWordsKit={currentWordsKit}
                 elementStartHandler={dragStartHandler}
-                dragOverHandler={dragOverBoxHandler}
                 dropHandler={kitDropHandler}
             />
         </StyledAnswerBox>

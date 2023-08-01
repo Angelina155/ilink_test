@@ -20,16 +20,15 @@ interface AnswerFieldProps {
     elementStartHandler: (e: React.DragEvent, word: KitWord) => void;
     dropHandler: (e: React.DragEvent) => void;
     elementDropHandler: (e: React.DragEvent, word: KitWord) => void;
-    elementInteraction: (e: React.DragEvent, isOver: boolean) => void;
 }
 
 
-const AnswerField: FC<AnswerFieldProps> = ({ currentAnswer, elementStartHandler, dropHandler, elementDropHandler, elementInteraction  }) => {
+const AnswerField: FC<AnswerFieldProps> = ({ currentAnswer, elementStartHandler, dropHandler, elementDropHandler  }) => {
 
     return (
         <StyledAnswerField
                 onDrop={(e) => dropHandler(e)}
-                onDragOver={(e) => elementInteraction(e, true)}
+                onDragOver={(e) => e.preventDefault()}
              >
             {currentAnswer.map(kitWord => (
                 <AnswerWord
@@ -37,7 +36,7 @@ const AnswerField: FC<AnswerFieldProps> = ({ currentAnswer, elementStartHandler,
                     word={kitWord}
                     dragStartHandler={elementStartHandler}
                     dropHandler={elementDropHandler}
-                    elementInteraction={elementInteraction}
+                    elementInteraction={true}
                 />
             ))}    
         </StyledAnswerField>

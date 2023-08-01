@@ -1,11 +1,11 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import { KitWord } from '../types/types';
 
 /**&:hover {
     animation: ${animation1} 500ms linear;
 } */
-const StyledAnswerWord = styled.p`
+const StyledAnswerWord = styled.p<{$isOver: boolean}>`
 min-width: 70px;
 height: 30px;
 padding: 4px 5px;
@@ -13,10 +13,9 @@ text-align: center;
 border-radius: 13px;
 border: 1px solid #C9C9C9;
 background: #FFF;
-box-shadow: 0px 8px 4px -6px rgba(0, 0, 0, 0.25);
 cursor: grab;
-
-
+box-shadow: ${props => props.$isOver ? '6px 0 10px #C4C9BD' : '0px 8px 4px -6px rgba(0, 0, 0, 0.25)'};
+margin-right: ${props => props.$isOver ? '20px' : '0px'};
 
 @media (max-width: 1480px) {
     min-width: 60px;
@@ -45,19 +44,28 @@ interface AnswerWordProps {
   word: KitWord;
   dragStartHandler: (e: React.DragEvent, word: KitWord) => void;
   dropHandler?: (e: React.DragEvent, word: KitWord) => void;
-  elementInteraction?: (e: React.DragEvent, isOver: boolean) => void;
+  elementInteraction?: boolean;
 }
 
-
 const AnswerWord: FC<AnswerWordProps> = ({ word, dragStartHandler, dropHandler, elementInteraction }) => {
+  const [isOver, setIsOver] = useState<boolean>(false)
+
+  function elementDropHandler (e: React.DragEvent, word: KitWord): void {
+    setIsOver(false);
+    if (dropHandler) {
+      dropHandler(e, word);
+    }
+  }
+
     return (
         <StyledAnswerWord 
+            $isOver={isOver}
             draggable={true}                    
             onDragStart={(e) => dragStartHandler(e, word)}
-            onDrop={(e) => dropHandler ? dropHandler(e, word) : {}}
-            onDragOver={(e) => elementInteraction ? elementInteraction(e, true) : {}}
-            onDragLeave={(e) => elementInteraction ? elementInteraction(e, false) : {}}
-            onDragEnd={(e) => elementInteraction ? elementInteraction(e, false) : {}}
+            onDrop={(e) => elementDropHandler(e, word)}
+            onDragOver={() => elementInteraction ? setIsOver(true) : {}}
+            onDragLeave={() => elementInteraction ? setIsOver(false) : {}}
+            onDragEnd={() => elementInteraction ? setIsOver(false) : {}}
         >
             {word.word}
         </StyledAnswerWord>

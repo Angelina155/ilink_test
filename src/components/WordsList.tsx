@@ -24,16 +24,15 @@ justify-content: center;
 interface WordsListProps {
   currentWordsKit: KitWord[];
   elementStartHandler: (e: React.DragEvent, word: KitWord) => void;
-  dragOverHandler: (e: React.DragEvent) => void;
   dropHandler: (e: React.DragEvent) => void;
 }
 
 
-const WordsList: FC<WordsListProps> = ({ currentWordsKit, elementStartHandler, dragOverHandler, dropHandler }) => {
+const WordsList: FC<WordsListProps> = ({ currentWordsKit, elementStartHandler, dropHandler }) => {
     return (
       <StyledWordsList
         onDrop={(e) => dropHandler(e)}
-        onDragOver={(e) => dragOverHandler(e)}
+        onDragOver={(e) => e.preventDefault()}
       >
       {currentWordsKit.map(kitWord => (
         <AnswerWord
