@@ -10,6 +10,7 @@ display: flex;
 gap: 15px 10px;
 flex-wrap: wrap;
 justify-content: center;
+margin-top: 40px;
 @media (max-width: 960px) {
     gap: 10px 7px;
 }

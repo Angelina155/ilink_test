@@ -8,6 +8,7 @@ width: 95%;
 display: flex;
 justify-content: center;
 align-items: center;
+gap: 15px;
 `
 
 const StyledAvatarImg = styled.div`
