@@ -4,7 +4,7 @@ import styled, { keyframes } from 'styled-components';
 import { KitWord } from '../types/types';
 import AnswerField from './AnswerField';
 import WordsList from './WordsList';
-import AnswerWord from './AnswerWord';
+import CheckButton from './CheckButton';
 
 /*const animation1 = keyframes`
 0% {
@@ -16,31 +16,49 @@ import AnswerWord from './AnswerWord';
 `*/
 
 const StyledAnswerBox = styled.div`
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+gap: 25px;
+margin-bottom: 30px;
 `
 
 interface AnswerBoxProps {
   words: string[];
+  currentAnswer: KitWord[];
+  editCurrentAnswer: (answer: KitWord[]) => void;
 }
 
-const AnswerBox: FC<AnswerBoxProps> = ({ words }) => {
+function shuffleWords(words: string[]): string[] {
+    let res: string[] = Array.from(words);
+
+    for (let curIndex: number = res.length - 1; curIndex > 0; curIndex-- ) {
+        const newIndex: number = Math.floor(Math.random() * (curIndex + 1));
+        const temp = res[curIndex]; res[curIndex] = res[newIndex]; res[newIndex] = temp;
+    }
+
+    return res
+}
+
+function deleteWord (array: KitWord[], id: number, newElement: KitWord | null = null) : KitWord[] {
+    let temp: KitWord[] = array.filter(el => el.id !== id);
+
+    if (newElement) {
+        temp.push(newElement);
+    }
+    
+    return temp
+}
+
+
+const AnswerBox: FC<AnswerBoxProps> = ({ words, currentAnswer, editCurrentAnswer }) => {
     const [currentWordsKit, setCurrentWordsKit] = useState<KitWord[]>([]);
-    const [currentAnswer, setCurrentAnswer] = useState<KitWord[]>([]);
     const [currentWord, setCurrentWord] = useState<KitWord>({id: -1, word: ''});
 
     useEffect(() => {
         prepareWords();
     }, [])
 
-    function shuffleWords(words: string[]): string[] {
-        let res: string[] = Array.from(words);
-
-        for (let curIndex: number = res.length - 1; curIndex > 0; curIndex-- ) {
-            const newIndex: number = Math.floor(Math.random() * (curIndex + 1));
-            const temp = res[curIndex]; res[curIndex] = res[newIndex]; res[newIndex] = temp;
-        }
-
-        return res
-    }
 
     function prepareWords() : void {
         const temp: KitWord[] = [];
@@ -52,21 +70,11 @@ const AnswerBox: FC<AnswerBoxProps> = ({ words }) => {
         setCurrentWord(kitWord);
     }
 
-    function deleteWord (array: KitWord[], id: number, newElement: KitWord | null = null) : KitWord[] {
-        let temp: KitWord[] = array.filter(el => el.id !== id);
-
-        if (newElement) {
-            temp.push(newElement);
-        }
-        
-        return temp
-    }
-
     function answerFieldDropHandler(e: React.DragEvent): void {
         e.preventDefault();
 
         if (!currentAnswer.includes(currentWord)) {
-            setCurrentAnswer([...currentAnswer, currentWord]);
+            editCurrentAnswer([...currentAnswer, currentWord]);
             setCurrentWordsKit(deleteWord(currentWordsKit, currentWord.id, {id: currentWord.id, word: ''}));
         }   
     }
@@ -74,7 +82,7 @@ const AnswerBox: FC<AnswerBoxProps> = ({ words }) => {
     function kitDropHandler(e: React.DragEvent): void {
         e.preventDefault();    
 
-        setCurrentAnswer(deleteWord(currentAnswer, currentWord.id));
+        editCurrentAnswer(deleteWord(currentAnswer, currentWord.id));
 
         let temp: KitWord[] = Array.from(currentWordsKit);
         let curIndex = temp.findIndex(el => el.id === currentWord.id);
@@ -104,7 +112,7 @@ const AnswerBox: FC<AnswerBoxProps> = ({ words }) => {
         }
 
         temp.splice(temp.indexOf(kitWord) + 1, 0, currentWord);
-        setCurrentAnswer(temp);
+        editCurrentAnswer(temp);
 
         e.stopPropagation();
     }

@@ -9,8 +9,8 @@ width: 93%;
 display: flex;
 gap: 15px 10px;
 flex-wrap: wrap;
-justify-content: center;
-margin-top: 40px;
+justify-content: space-between;
+margin-top: 10px;
 @media (max-width: 960px) {
     gap: 10px 7px;
 }

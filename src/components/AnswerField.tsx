@@ -5,7 +5,7 @@ import { KitWord } from '../types/types';
 import AnswerWord from './AnswerWord';
 
 const StyledAnswerField = styled.div`
-width: 95%;
+width: 93%;
 height: 92px;
 margin-top: 20px;
 padding-top: 10px;

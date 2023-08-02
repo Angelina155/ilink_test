@@ -1,5 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
+import { KitWord } from '../types/types';
 
 const StyledButton = styled.button`
 width: 93%;
@@ -8,19 +9,19 @@ border-radius: 88px;
 border: none;
 background: linear-gradient(135deg, #FFF 0%, #F2F2F2 100%);
 box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.20) inset, -2px -4px 12px #FFF inset;
-margin-top: 20px;
 font-weight: 700;
 cursor: pointer;
 `
 
+
 interface ButtonProps {
-  
+  checkAnswer: () => void;
 }
 
+const Button: FC<ButtonProps> = ({ checkAnswer }) => {
 
-const Button: FC<ButtonProps> = ({  }) => {
     return (
-        <StyledButton>Проверить</StyledButton>
+        <StyledButton onClick={()=> checkAnswer()}>Проверить</StyledButton>
     );
 };
 

@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { KitWord } from '../types/types';
 
 /**&:hover {
@@ -14,8 +14,18 @@ border-radius: 13px;
 border: 1px solid #C9C9C9;
 background: #FFF;
 cursor: grab;
-box-shadow: ${props => props.$isOver ? '6px 0 10px #C4C9BD' : '0px 8px 4px -6px rgba(0, 0, 0, 0.25)'};
-margin-right: ${props => props.$isOver ? '20px' : '0px'};
+
+
+${props => props.$isOver 
+  ? css`
+    box-shadow: 6px 0 10px #C4C9BD;
+    margin-right: 20px;
+  `
+  : css`
+    box-shadow: 0px 8px 4px -6px rgba(0, 0, 0, 0.25);
+    margin-right: 0;
+  `
+}
 
 @media (max-width: 1480px) {
     min-width: 60px;

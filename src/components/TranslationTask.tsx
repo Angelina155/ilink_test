@@ -1,15 +1,13 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 
-import AnswerField from './AnswerField';
-//import AnswerWordsList from './AnswerWordsList';
-import AnswerResult from './AnswerResult';
-import Button from './Button';
 import Title from './Title';
 import TaskBox from './TaskBox';
 import AnswerBox from './AnswerBox';
 
-import { Task } from '../types/types';
+import { KitWord, Task } from '../types/types';
+import CheckButton from './CheckButton';
+import AnswerResult from './AnswerResult';
 
 const StyledContainer = styled.section`
 width: 40%;
@@ -19,7 +17,8 @@ display: flex;
 flex-direction: column;
 justify-content: space-between;
 align-items: center;
-gap: 40px 0;
+gap: 25px 0;
+
 @media (max-width: 1290px) {
   width: 45%;
 }
@@ -53,14 +52,27 @@ interface TranslationTaskProps {
   }  
 
 const TranslationTask: FC<TranslationTaskProps> = ({ translationTask}) => {
-    return(
-        <StyledContainer>
-            <Title text='Переведите фразу'/>
-            <TaskBox task={translationTask.task}/>
-            <AnswerBox words={translationTask.extraWords}/>
-            {/*<AnswerResult/>*/}
-            <Button/>
-        </StyledContainer>
+  const [currentAnswer, setCurrentAnswer] = useState<KitWord[]>([]);
+  const [isCompleted, setIsCompleted] = useState<boolean>(false);
+  const [isRight, setIsRight] = useState<boolean>(false);
+
+  function checkAnswer (currentAnswer: KitWord[], rightAnswer: string): void {
+    setIsCompleted(true);
+    setIsRight(currentAnswer.map(el => el.word).join(' ') === rightAnswer);
+  }
+
+
+  return(
+    <StyledContainer>
+      <Title text='Переведите фразу'/>
+      <TaskBox task={translationTask.task}/>
+      <AnswerBox words={translationTask.extraWords} currentAnswer={currentAnswer} editCurrentAnswer={(answer) => setCurrentAnswer(answer)}/>
+      {isCompleted 
+        ? <AnswerResult isRight={isRight}/> 
+        : <></>
+      }
+      <CheckButton checkAnswer={() => checkAnswer(currentAnswer, translationTask.answer)}/>
+    </StyledContainer>
   )
 };
 
