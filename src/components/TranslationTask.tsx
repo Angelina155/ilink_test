@@ -9,6 +9,10 @@ import { KitWord, Task } from '../types/types';
 import CheckButton from './CheckButton';
 import AnswerResult from './AnswerResult';
 
+//import { useSpeechSynthesis } from 'react-speech-kit';
+const reactSpeech = require('react-speech-kit');
+//import { useSpeechSynthesis } from reactSpeech;
+
 const StyledContainer = styled.section`
 width: 40%;
 max-width: 650px;
@@ -56,9 +60,17 @@ const TranslationTask: FC<TranslationTaskProps> = ({ translationTask}) => {
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const [isRight, setIsRight] = useState<boolean>(false);
 
+  const {speak, voices} = reactSpeech.useSpeechSynthesis();
+
   function checkAnswer (currentAnswer: KitWord[], rightAnswer: string): void {
     setIsCompleted(true);
-    setIsRight(currentAnswer.map(el => el.word).join(' ') === rightAnswer);
+
+    const res: boolean = currentAnswer.map(el => el.word).join(' ') === rightAnswer;
+    setIsRight(res);
+
+    if (res) {
+      speak({ text: rightAnswer, voice: voices[6] })
+    }
   }
 
 
