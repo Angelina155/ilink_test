@@ -6,15 +6,6 @@ import AnswerField from './AnswerField';
 import WordsList from './WordsList';
 import CheckButton from './CheckButton';
 
-/*const animation1 = keyframes`
-0% {
-    transform: translateX(0);
-}
-100% {
-    transform: translateX(70px);
-}
-`*/
-
 const StyledAnswerBox = styled.div`
 display: flex;
 flex-direction: column;
@@ -70,139 +61,28 @@ const AnswerBox: FC<AnswerBoxProps> = ({ words, currentAnswer, editCurrentAnswer
         setCurrentWord(kitWord);
     }
 
-    function answerFieldDropHandler(e: React.DragEvent): void {
-        e.preventDefault();
-
-        if (!currentAnswer.includes(currentWord)) {
-            editCurrentAnswer([...currentAnswer, currentWord]);
-            setCurrentWordsKit(deleteWord(currentWordsKit, currentWord.id, {id: currentWord.id, word: ''}));
-        }   
-    }
-
-    function kitDropHandler(e: React.DragEvent): void {
-        e.preventDefault();    
-
-        editCurrentAnswer(deleteWord(currentAnswer, currentWord.id));
-
-        let temp: KitWord[] = Array.from(currentWordsKit);
-        let curIndex = temp.findIndex(el => el.id === currentWord.id);
-        temp[curIndex] = {id: currentWord.id, word: currentWord.word};
-        setCurrentWordsKit(temp);
-
-        setTimeout(() => {
-            setCurrentWordsKit([...temp.sort((a, b) => {
-                if (a.word === '' && b.word !== '')
-                    return 1
-                if (a.word !== '' && b.word === '')
-                    return -1
-                return a.id - b.id
-            })]);
-        }, 500);
-    }
-
-    function elementDropHandler(e: React.DragEvent, kitWord: KitWord): void {
-        e.preventDefault();
-        
-        let temp: KitWord[] = Array.from(currentAnswer);
-        if (currentAnswer.includes(currentWord)) {
-            temp = deleteWord(temp, currentWord.id);      
-        }
-        else {
-            setCurrentWordsKit(deleteWord(currentWordsKit, currentWord.id, {id: currentWord.id, word: ''}));
-        }
-
-        temp.splice(temp.indexOf(kitWord) + 1, 0, currentWord);
-        editCurrentAnswer(temp);
-
-        e.stopPropagation();
-    }
-
     return (
         <StyledAnswerBox>
             <AnswerField
-                currentAnswer={currentAnswer}
+                currentWord={currentWord}
                 elementStartHandler={dragStartHandler}
-                dropHandler={answerFieldDropHandler}
-                elementDropHandler={elementDropHandler}
+                currentAnswer={currentAnswer}
+                editCurrentAnswer={(answer) => editCurrentAnswer(answer)}
+                currentWordsKit={currentWordsKit}
+                editCurrentWordsKit={(wordsKit) => setCurrentWordsKit(wordsKit)}
+                deleteWord={deleteWord}
             />
             <WordsList
-                currentWordsKit={currentWordsKit}
+                currentWord={currentWord}
                 elementStartHandler={dragStartHandler}
-                dropHandler={kitDropHandler}
+                currentAnswer={currentAnswer}
+                editCurrentAnswer={(answer) => editCurrentAnswer(answer)}
+                currentWordsKit={currentWordsKit}
+                editCurrentWordsKit={(wordsKit) => setCurrentWordsKit(wordsKit)}
+                deleteWord={deleteWord}
             />
         </StyledAnswerBox>
     );
 };
 
 export default AnswerBox;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*import React, { FC, useState } from 'react';
-import styled from 'styled-components';
-import AnswerField from './AnswerField';
-import AnswerWordsList from './AnswerWordsList';
-
-const StyledAnswerBox = styled.div`
-
-`
-
-interface AnswerBoxProps {
-  words: string[];
-}
-
-
-const AnswerBox: FC<AnswerBoxProps> = ({ words }) => {
-    const [currentAnswer, setCurrentAnswer] = useState<string[]>([])
-
-    function pushToAnswer(word: string): void {
-        currentAnswer.push(word)
-        setCurrentAnswer(currentAnswer)
-    }
-
-
-    return (
-        <StyledAnswerBox>
-            <AnswerField/>
-            <AnswerWordsList words={words}/>
-        </StyledAnswerBox>
-    );
-};
-
-export default AnswerBox;*/

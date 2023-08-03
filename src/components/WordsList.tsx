@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 
 import AnswerWord from './AnswerWord';
@@ -23,23 +23,65 @@ margin-top: 10px;
 `
 
 interface WordsListProps {
-  currentWordsKit: KitWord[];
+  currentWord: KitWord;
   elementStartHandler: (e: React.DragEvent, word: KitWord) => void;
-  dropHandler: (e: React.DragEvent) => void;
+  currentAnswer: KitWord[];
+  editCurrentAnswer: (answer: KitWord[]) => void;
+  currentWordsKit: KitWord[];
+  editCurrentWordsKit: (wordsKit: KitWord[]) => void;
+  deleteWord: (array: KitWord[], id: number, newElement?: KitWord | null) => KitWord[];
 }
 
 
-const WordsList: FC<WordsListProps> = ({ currentWordsKit, elementStartHandler, dropHandler }) => {
+const WordsList: FC<WordsListProps> = ({ currentWord, elementStartHandler, currentAnswer, editCurrentAnswer, currentWordsKit, editCurrentWordsKit, deleteWord }) => {
+  const [animation, setAnimation] = useState<number[] | null>(null);
+
+
+  function dropHandler(e: React.DragEvent): void {
+    e.preventDefault();    
+
+    editCurrentAnswer(deleteWord(currentAnswer, currentWord.id));
+
+    let temp: KitWord[] = Array.from(currentWordsKit);
+    const curIndex = temp.findIndex(el => el.id === currentWord.id);
+    temp[curIndex] = {id: currentWord.id, word: currentWord.word};
+    editCurrentWordsKit(temp);
+
+    let newTemp: KitWord[] = Array.from(temp)
+    newTemp.sort((a, b) => {
+      if (a.word === '' && b.word !== '')
+        return 1
+      if (a.word !== '' && b.word === '')
+        return -1
+      return a.id - b.id
+    })
+
+    const newIndex = newTemp.findIndex(el => el.id === currentWord.id);
+
+    setTimeout(() => {setAnimation([curIndex, newIndex])}, 150);
+    
+
+    setTimeout(() => {
+        editCurrentWordsKit(newTemp);
+        setAnimation(null);
+    }, 600);
+
+
+}
+
+
     return (
       <StyledWordsList
         onDrop={(e) => dropHandler(e)}
         onDragOver={(e) => e.preventDefault()}
       >
-      {currentWordsKit.map(kitWord => (
+      {currentWordsKit.map((kitWord, index) => (
         <AnswerWord
           key={kitWord.id}
           word={kitWord}
           dragStartHandler={elementStartHandler}
+          animation={animation}
+          index={index}
         />
       ))}
       </StyledWordsList>

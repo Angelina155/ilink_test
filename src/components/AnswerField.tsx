@@ -40,27 +40,59 @@ position: relative;
 `
 
 interface AnswerFieldProps {
-    currentAnswer: KitWord[];
+    currentWord: KitWord;
     elementStartHandler: (e: React.DragEvent, word: KitWord) => void;
-    dropHandler: (e: React.DragEvent) => void;
-    elementDropHandler: (e: React.DragEvent, word: KitWord) => void;
+    currentAnswer: KitWord[];
+    editCurrentAnswer: (answer: KitWord[]) => void;
+    currentWordsKit: KitWord[];
+    editCurrentWordsKit: (wordsKit: KitWord[]) => void;
+    deleteWord: (array: KitWord[], id: number, newElement?: KitWord | null) => KitWord[];
 }
 
 
-const AnswerField: FC<AnswerFieldProps> = ({ currentAnswer, elementStartHandler, dropHandler, elementDropHandler  }) => {
+const AnswerField: FC<AnswerFieldProps> = ({ currentWord, elementStartHandler, currentAnswer, editCurrentAnswer, currentWordsKit, editCurrentWordsKit, deleteWord }) => {
+
+    function dropHandler(e: React.DragEvent): void {
+        e.preventDefault();
+
+        if (!currentAnswer.includes(currentWord)) {
+            editCurrentAnswer([...currentAnswer, currentWord]);
+            editCurrentWordsKit(deleteWord(currentWordsKit, currentWord.id, {id: currentWord.id, word: ''}));
+        }   
+    }
+
+    function elementDropHandler(e: React.DragEvent, kitWord: KitWord): void {
+        e.preventDefault();
+        
+        let temp: KitWord[] = Array.from(currentAnswer);
+        if (currentAnswer.includes(currentWord)) {
+            temp = deleteWord(temp, currentWord.id);      
+        }
+        else {
+            editCurrentWordsKit(deleteWord(currentWordsKit, currentWord.id, {id: currentWord.id, word: ''}));
+        }
+
+        temp.splice(temp.indexOf(kitWord) + 1, 0, currentWord);
+        editCurrentAnswer(temp);
+
+        e.stopPropagation();
+    }
+
 
     return (
         <StyledAnswerField
                 onDrop={(e) => dropHandler(e)}
                 onDragOver={(e) => e.preventDefault()}
              >
-            {currentAnswer.map(kitWord => (
+            {currentAnswer.map((kitWord, index) => (
                 <AnswerWord
                     key={kitWord.id}
                     word={kitWord}
                     dragStartHandler={elementStartHandler}
                     dropHandler={elementDropHandler}
                     elementInteraction={true}
+                    animation={null}
+                    index={index}
                 />
             ))}    
         </StyledAnswerField>
