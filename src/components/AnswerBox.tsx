@@ -1,21 +1,21 @@
 import React, { FC, useEffect, useState } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 import { KitWord } from '../types/types';
 import AnswerField from './AnswerField';
 import WordsList from './WordsList';
-import CheckButton from './CheckButton';
 
 const StyledAnswerBox = styled.div`
+margin-bottom: 30px;
 display: flex;
 flex-direction: column;
 justify-content: space-between;
 gap: 25px;
-margin-bottom: 30px;
 `
 
 interface AnswerBoxProps {
   words: string[];
+  rightAnswer: string;
   currentAnswer: KitWord[];
   editCurrentAnswer: (answer: KitWord[]) => void;
 }
@@ -28,7 +28,7 @@ function shuffleWords(words: string[]): string[] {
         const temp = res[curIndex]; res[curIndex] = res[newIndex]; res[newIndex] = temp;
     }
 
-    return res
+    return res;
 }
 
 function deleteWord (array: KitWord[], id: number, newElement: KitWord | null = null) : KitWord[] {
@@ -38,11 +38,10 @@ function deleteWord (array: KitWord[], id: number, newElement: KitWord | null = 
         temp.push(newElement);
     }
     
-    return temp
+    return temp;
 }
 
-
-const AnswerBox: FC<AnswerBoxProps> = ({ words, currentAnswer, editCurrentAnswer }) => {
+const AnswerBox: FC<AnswerBoxProps> = ({ words, rightAnswer, currentAnswer, editCurrentAnswer }) => {
     const [currentWordsKit, setCurrentWordsKit] = useState<KitWord[]>([]);
     const [currentWord, setCurrentWord] = useState<KitWord>({id: -1, word: ''});
 
@@ -50,10 +49,9 @@ const AnswerBox: FC<AnswerBoxProps> = ({ words, currentAnswer, editCurrentAnswer
         prepareWords();
     }, [])
 
-
     function prepareWords() : void {
-        const temp: KitWord[] = [];
-        shuffleWords(words).forEach((el, index) => temp.push({id: index, word: el}));
+        let temp: KitWord[] = [];
+        shuffleWords([...words, ...rightAnswer.split(' ')]).forEach((el, index) => temp.push({id: index, word: el}));
         setCurrentWordsKit(temp);
     }
 
@@ -61,6 +59,7 @@ const AnswerBox: FC<AnswerBoxProps> = ({ words, currentAnswer, editCurrentAnswer
         setCurrentWord(kitWord);
     }
 
+    
     return (
         <StyledAnswerBox>
             <AnswerField

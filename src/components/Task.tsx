@@ -18,14 +18,14 @@ left: -12%;
 `
 
 const StyledTaskSentence = styled.div`
-margin-left: 20px;
-padding: 20px 5px;
 position: relative;
 width: 88%;
+margin-left: 20px;
+padding: 20px 5px;
 display: flex;
 align-content: center;
-gap: 5px 10px;
 flex-wrap: wrap;
+gap: 5px 10px;
 
 @media (max-width: 1000px) {
     padding: 10px 5px;

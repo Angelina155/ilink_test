@@ -1,17 +1,14 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 
+import { KitWord, Task } from '../types/types';
 import Title from './Title';
 import TaskBox from './TaskBox';
 import AnswerBox from './AnswerBox';
-
-import { KitWord, Task } from '../types/types';
 import CheckButton from './CheckButton';
 import AnswerResult from './AnswerResult';
 
-//import { useSpeechSynthesis } from 'react-speech-kit';
 const reactSpeech = require('react-speech-kit');
-//import { useSpeechSynthesis } from reactSpeech;
 
 const StyledContainer = styled.section`
 width: 40%;
@@ -49,13 +46,12 @@ gap: 25px 0;
 }
 `
 
-
-
 interface TranslationTaskProps {
     translationTask: Task;
   }  
 
-const TranslationTask: FC<TranslationTaskProps> = ({ translationTask}) => {
+
+const TranslationTask: FC<TranslationTaskProps> = ({ translationTask }) => {
   const [currentAnswer, setCurrentAnswer] = useState<KitWord[]>([]);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const [isRight, setIsRight] = useState<boolean>(false);
@@ -78,7 +74,7 @@ const TranslationTask: FC<TranslationTaskProps> = ({ translationTask}) => {
     <StyledContainer>
       <Title text='Переведите фразу'/>
       <TaskBox task={translationTask.task}/>
-      <AnswerBox words={translationTask.extraWords} currentAnswer={currentAnswer} editCurrentAnswer={(answer) => setCurrentAnswer(answer)}/>
+      <AnswerBox words={translationTask.extraWords} rightAnswer={translationTask.answer} currentAnswer={currentAnswer} editCurrentAnswer={(answer) => setCurrentAnswer(answer)}/>
       {isCompleted 
         ? <AnswerResult isRight={isRight}/> 
         : <></>

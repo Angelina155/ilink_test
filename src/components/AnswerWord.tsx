@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
-import styled, { css, keyframes } from 'styled-components';
+import styled, { css } from 'styled-components';
+
 import { KitWord } from '../types/types';
 import { WordsKitAnimation } from '../styles/animation';
 
@@ -8,9 +9,9 @@ const StyledAnswerWord = styled.p<{$isOver: boolean, $animation: number[] | null
 min-width: 70px;
 height: 30px;
 padding: 4px 5px;
-text-align: center;
 border-radius: 13px;
 border: 1px solid #C9C9C9;
+text-align: center;
 background: #FFF;
 cursor: grab;
 
@@ -18,12 +19,12 @@ animation: ${props => WordsKitAnimation(props.$animation, props.$curWordIndex, 7
 
 ${props => props.$isOver 
   ? css`
-    box-shadow: 6px 0 10px #C4C9BD;
     margin-right: 20px;
+    box-shadow: 6px 0 10px #C4C9BD;
   `
   : css`
-    box-shadow: 0px 8px 4px -6px rgba(0, 0, 0, 0.25);
     margin-right: 0;
+    box-shadow: 0px 8px 4px -6px rgba(0, 0, 0, 0.25);
   `
 }
 
@@ -69,6 +70,7 @@ interface AnswerWordProps {
   index: number;
 }
 
+
 const AnswerWord: FC<AnswerWordProps> = ({ word, dragStartHandler, dropHandler, elementInteraction, animation, index }) => {
   const [isOver, setIsOver] = useState<boolean>(false)
 
@@ -79,6 +81,7 @@ const AnswerWord: FC<AnswerWordProps> = ({ word, dragStartHandler, dropHandler, 
     }
   }
 
+  
     return (
         <StyledAnswerWord 
             $isOver={isOver}

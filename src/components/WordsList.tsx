@@ -1,16 +1,17 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 
-import AnswerWord from './AnswerWord';
 import { KitWord } from '../types/types';
+import AnswerWord from './AnswerWord';
 
 const StyledWordsList = styled.div`
 width: 93%; 
-display: flex;
-gap: 15px 10px;
-flex-wrap: wrap;
-justify-content: space-between;
 margin-top: 10px;
+display: flex;
+justify-content: space-between;
+flex-wrap: wrap;
+gap: 15px 10px;
+
 @media (max-width: 960px) {
     gap: 10px 7px;
 }
@@ -36,7 +37,6 @@ interface WordsListProps {
 const WordsList: FC<WordsListProps> = ({ currentWord, elementStartHandler, currentAnswer, editCurrentAnswer, currentWordsKit, editCurrentWordsKit, deleteWord }) => {
   const [animation, setAnimation] = useState<number[] | null>(null);
 
-
   function dropHandler(e: React.DragEvent): void {
     e.preventDefault();    
 
@@ -47,26 +47,23 @@ const WordsList: FC<WordsListProps> = ({ currentWord, elementStartHandler, curre
     temp[curIndex] = {id: currentWord.id, word: currentWord.word};
     editCurrentWordsKit(temp);
 
-    let newTemp: KitWord[] = Array.from(temp)
+    let newTemp: KitWord[] = Array.from(temp);
     newTemp.sort((a, b) => {
       if (a.word === '' && b.word !== '')
-        return 1
+        return 1;
       if (a.word !== '' && b.word === '')
-        return -1
-      return a.id - b.id
+        return -1;
+      return a.id - b.id;
     })
 
     const newIndex = newTemp.findIndex(el => el.id === currentWord.id);
 
     setTimeout(() => {setAnimation([curIndex, newIndex])}, 150);
     
-
     setTimeout(() => {
         editCurrentWordsKit(newTemp);
         setAnimation(null);
     }, 600);
-
-
 }
 
 

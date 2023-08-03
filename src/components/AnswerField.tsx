@@ -5,6 +5,7 @@ import { KitWord } from '../types/types';
 import AnswerWord from './AnswerWord';
 
 const StyledAnswerField = styled.div`
+position: relative;
 width: 93%;
 height: 92px;
 margin-top: 20px;
@@ -12,20 +13,18 @@ padding-top: 10px;
 border-top: 1px solid #4B4B4B;
 border-bottom: 1px solid #4B4B4B;
 display: flex;
-gap: 10px 10px;
-flex-wrap: wrap;
 flex-direction: center;
-position: relative;
+flex-wrap: wrap;
+gap: 10px 10px;
 
 &:after {
     content: '';
     position: absolute;
-    width: 100%;
-    height: 1px;
     top: 50%;
     left: 0;
+    width: 100%;
+    height: 1px;
     background-color: #4B4B4B; 
-
 }
 
 @media (max-width: 960px) {
